@@ -1,9 +1,7 @@
 import { expect } from "chai"
-import { Namespaces } from "../index.js"
+import { Namespaces, NamespacesArray } from "../index.js"
 
-describe("Namespaces lookup", () => {
-  const namespaces = new Namespaces()
-
+function testWith(namespaces) {
   namespaces.add("http://purl.org/dc/elements/1.1/")
   namespaces.add("http://purl.org/dc/terms/")
 
@@ -21,4 +19,10 @@ describe("Namespaces lookup", () => {
       expect(namespaces.lookup(key)).to.equal(value)
     })
   })
-})
+}
+
+describe("Namespaces", () => testWith(new Namespaces()))
+describe("NamespacesArray", () => testWith(new NamespacesArray()))
+
+
+

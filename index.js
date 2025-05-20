@@ -7,7 +7,7 @@ class Node {
     this.label = label
     this.children = {}
     this.word = word
-    this.data = data
+    this.data = data // TODO: optional payload data
   }
 }
 
@@ -16,7 +16,7 @@ export class Namespaces {
     this.root = new Node("")
   }
 
-  add(str, data=null) {
+  add(str) {
     let node = this.root
 
     for (let i=0; i<str.length; i++) {
@@ -108,4 +108,14 @@ function commonPrefix(a, b) {
     prefix += a[i]
   }
   return prefix
+}
+
+export class NamespacesArray extends Set {
+  lookup(str) {
+    for (let namespace of this) {
+      if (str.startsWith(namespace)) {
+        return namespace
+      }
+    }
+  }
 }

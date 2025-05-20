@@ -34,6 +34,20 @@ namespaces.lookup("http://purl.org/dc/terms/title") // http://purl.org/dc/terms/
 namespaces.lookup("http://schema.org/title")        // undefined
 ~~~
 
+An alternative, less performant implementation is this (also exportable):
+
+~~~js
+class NamespacesArray extends Set {
+  lookup(str) {
+    for (let namespace of this) {
+      if (str.startsWith(namespace)) {
+        return namespace
+      }
+    }
+  }
+}
+~~~
+
 ## Maintainers
 
 - [@nichtich](https://github.com/nichtich) (Jakob Voß)
