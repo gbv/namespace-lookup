@@ -1,0 +1,49 @@
+# namespace-lookup
+
+[![Test](https://github.com/gbv/namespace-lookup/actions/workflows/test.yml/badge.svg?branch=dev)](https://github.com/gbv/namespace-lookup/actions/workflows/test.yml)
+[![NPM Version](http://img.shields.io/npm/v/namespace-lookup.svg?style=flat)](https://www.npmjs.org/package/namespace-lookup)
+
+> Find the longest namespace that a string starts with
+
+This Node package implements a [radix tree](https://en.wikipedia.org/wiki/Radix_tree) too efficiently look up whether a string starts with a namespace from a set of namespace.
+
+# Table of Contents
+
+- [Install](#install)
+- [Usage](#usage)
+- [Maintainers](#maintainers)
+- [License](#license)
+
+## Install 
+
+```bash
+npm install namespace-lookup
+```
+
+## Usage
+
+~~~js
+import { Namespaces } from "namespace-lookup"
+
+const namespaces = new Namespaces() // optionally pass an array of strings
+
+namespaces.add("http://purl.org/dc/elements/1.1/")
+namespaces.add("http://purl.org/dc/terms/")
+
+namespaces.lookup("http://purl.org/dc/terms/title") // http://purl.org/dc/terms/
+namespaces.lookup("http://schema.org/title")        // undefined
+~~~
+
+## Maintainers
+
+- [@nichtich](https://github.com/nichtich) (Jakob Voß)
+
+## Contribute
+
+Contributions are welcome! Best use [the issue tracker](https://github.com/gbv/namespace-lookup/issues) for questions, bug reports, and/or feature requests!
+
+## License
+
+The implementation is based on a [detailed description](https://mroseman.com/blog/autocomplete-radix-tree/) of the algorithm by Matt Roseman.
+
+MIT license
