@@ -3,9 +3,9 @@
 [![Test](https://github.com/gbv/namespace-lookup/actions/workflows/test.yml/badge.svg?branch=dev)](https://github.com/gbv/namespace-lookup/actions/workflows/test.yml)
 [![NPM Version](http://img.shields.io/npm/v/namespace-lookup.svg?style=flat)](https://www.npmjs.org/package/namespace-lookup)
 
-> Find the longest namespace that a string starts with
+> Find the longest prefix that a string starts with
 
-This Node package implements a [radix tree](https://en.wikipedia.org/wiki/Radix_tree) too efficiently look up whether a string starts with a namespace from a set of namespace.
+This Node package implements a [radix tree](https://en.wikipedia.org/wiki/Radix_tree) too efficiently look up whether a string starts with a prefix from a set of prefix strings.
 
 # Table of Contents
 
@@ -25,7 +25,7 @@ npm install namespace-lookup
 ~~~js
 import { Namespaces } from "namespace-lookup"
 
-const namespaces = new Namespaces() // optionally pass an array of strings
+const namespaces = new Namespaces() // optionally pass an array of prefixes
 
 namespaces.add("http://purl.org/dc/elements/1.1/")
 namespaces.add("http://purl.org/dc/terms/")
@@ -46,6 +46,24 @@ class NamespacesArray extends Set {
     }
   }
 }
+~~~
+
+Class `Namespaces` also supports to add prefixes with a payload (any value except `null`) to be returned instead:
+
+~~~js
+namespaces.add("http://purl.org/dc/elements/1.1/","dc")
+namespaces.add("http://purl.org/dc/terms/","dct")
+
+namespaces.lookup("http://purl.org/dc/terms/title") // dct
+~~~
+
+Prefixes and payloads can also be passed as object:
+
+~~~js
+namespaces = new Namespaces({
+  "http://purl.org/dc/elements/1.1/": "dc",
+  "http://purl.org/dc/terms/": "dct"
+})
 ~~~
 
 ## Maintainers

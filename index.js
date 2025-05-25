@@ -7,29 +7,33 @@ class Node {
     this.label = label
     this.children = {}
     this.word = word
-    this.data = data // TODO: optional payload data
+    this.data = data
   }
 }
 
 export class Namespaces {
   constructor(values=[]) {
     this.root = new Node("")
-    values.forEach(v => this.add(v))
+    if (Array.isArray(values)) {    
+      values.forEach(v => this.add(v))
+    } else if (typeof values === "object") {
+      Object.entries(values).forEach(entry => this.add(...entry))
+    }
   }
 
-  add(str) {
+  add(str, data) {
     let node = this.root
 
     for (let i=0; i<str.length; i++) {
-      const char = str[i]
+      const chr = str[i]
       const rest = str.substr(i)
 
-      if (char in node.children) {
-        const label = node.children[char].label
+      if (chr in node.children) {
+        const label = node.children[chr].label
         const prefix = commonPrefix(label, rest)
 
         if (label === rest) {
-          node.children[char].word = true
+          node.children[chr].word = true
           return
         }
 
@@ -37,13 +41,13 @@ export class Namespaces {
           // edge label contains the rest plus some extra
           // => insert a new word node between the current node and the child, splitting up the edge label
           if (prefix.length === rest.length) {
-            const newNode = new Node(rest, true)
-  
+            const newNode = new Node(rest, true, data)
+
             // move the child to new node and adjust its label 
-            newNode.children[label[prefix.length]] = node.children[char]
+            newNode.children[label[prefix.length]] = node.children[chr]
             newNode.children[label[prefix.length]].label = label.substr(prefix.length)
   
-            node.children[char] = newNode
+            node.children[chr] = newNode
             return
           }
   
@@ -51,20 +55,20 @@ export class Namespaces {
           // => insert node between current node and it's child
           if (prefix.length < rest.length) {
             const newNode = new Node(prefix)
-  
-            newNode.children[label[prefix.length]] = node.children[char]
+ 
+            newNode.children[label[prefix.length]] = node.children[chr]
             newNode.children[label[prefix.length]].label = label.substr(prefix.length)
-            node.children[char] = newNode
+            node.children[chr] = newNode
   
-            newNode.children[rest[prefix.length]] = new Node(str.substr(i+prefix.length), true)
+            newNode.children[rest[prefix.length]] = new Node(str.substr(i+prefix.length), true, data)
             return
           }
         }
   
         i += label.length - 1
-        node = node.children[char]
+        node = node.children[chr]
       } else {
-        node.children[char] = new Node(rest, true)
+        node.children[chr] = new Node(rest, true, data)
         return
       }
     }
@@ -75,10 +79,10 @@ export class Namespaces {
     let node = this.root
 
     for (let i=0; i<str.length; i++) {
-      const char = str[i]
+      const chr = str[i]
 
-      if (char in node.children) {
-        const label = node.children[char].label
+      if (chr in node.children) {
+        const label = node.children[chr].label
         const rest = str.substr(i)
         const prefix = commonPrefix(label, rest)
 
@@ -86,17 +90,19 @@ export class Namespaces {
           return
         }
 
-        ns = ns.concat(node.children[char].label)
-        i += node.children[char].label.length - 1
-        node = node.children[char]
+        ns = ns.concat(node.children[chr].label)
+        i += node.children[chr].label.length - 1
+        node = node.children[chr]
       } else {
         // string starts with a namespace
-        return ns
+        return node.data === null ? ns : node.data
       }
     }
 
-    // string may be equal to a namespace
-    return node.word ? str : undefined
+    // string is equal to a namespace
+    if (node.word) {
+      return node.data === null ? str : node.data
+    }
   }
 }
 
