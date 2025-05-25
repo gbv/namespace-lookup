@@ -1,6 +1,6 @@
 {
   "name": "namespace-lookup",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Find the longest namespace that a string starts with",
   "keywords": [
     "trie",
@@ -15,7 +15,9 @@
   },
   "type": "module",
   "main": "index.js",
-  "files": [ "index.js" ],
+  "files": [
+    "index.js"
+  ],
   "scripts": {
     "test": "mocha",
     "lint": "eslint *.js test/",
