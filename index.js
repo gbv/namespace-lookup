@@ -12,8 +12,9 @@ class Node {
 }
 
 export class Namespaces {
-  constructor() {
+  constructor(values=[]) {
     this.root = new Node("")
+    values.forEach(v => this.add(v))
   }
 
   add(str) {
