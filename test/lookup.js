@@ -49,6 +49,14 @@ tests = {
   "http://purl.org/dc/elements/1.1/title": "dce",
 }
 
-ns = new Namespaces(prefixes)
 describe("Namespaces with payload", () => testWith(ns,[],tests))
+
+ns = new Namespaces(prefixes)
 describe("Namespaces(object) with payload", () => testWith(ns,[],tests))
+
+ns = new Namespaces(["http://example.org/foo","http://example.org/bar"])
+describe("common prefix", () => {
+  it("does not wrongly return common prefix", () => {
+    expect(ns.lookup("http://example.org/")).to.equal(undefined)
+  })
+})

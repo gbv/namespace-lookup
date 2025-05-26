@@ -95,7 +95,7 @@ export class Namespaces {
         node = node.children[chr]
       } else {
         // string starts with a namespace
-        return node.data === null ? ns : node.data
+        return node.word ? (node.data === null ? ns : node.data) : undefined
       }
     }
 
